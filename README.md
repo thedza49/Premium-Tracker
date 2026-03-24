@@ -3,11 +3,10 @@
 ## Project Overview
 This project tracks the daily performance of sold covered calls to monitor how much of the initial premium is "retained" leading up to expiration.
 
-## Trades (Sold Short)
+## Trades (Sold Short Example)
 | Symbol | Expiration | Strike | Qty | Entry Price | Entry Date | Total Premium |
 |--------|------------|--------|-----|-------------|------------|---------------|
-| GOOG   | 2026-04-02 | 302.50 | 6   | $2.95       | 2026-03-24 | $1,770        |
-| NFLX   | 2026-04-02 | 96.00  | 12  | $0.72       | 2026-03-24 | $864          |
+| TICKER | 2026-04-02 | 100.00 | 10  | $1.00       | 2026-03-24 | $1,000        |
 
 ## Metrics to Track (Daily)
 - **Current Mark:** Mid-price (between Bid and Ask) of the option.
