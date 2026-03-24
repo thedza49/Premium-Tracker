@@ -1,0 +1,13 @@
+{
+  "trades": [
+    {
+      "symbol": "TICKER",
+      "expiration": "2026-04-02",
+      "strike": 100.00,
+      "type": "C",
+      "quantity": 10,
+      "entry_price": 1.00,
+      "entry_date": "2026-03-24"
+    }
+  ]
+}

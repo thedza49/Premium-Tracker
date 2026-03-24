@@ -1,0 +1,5 @@
+trades.json
+company_events.json
+daily_stats.json
+*.pyc
+__pycache__/
