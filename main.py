@@ -35,6 +35,18 @@ def format_occ_symbol(trade):
     strike_formatted = f"{int(trade['strike'] * 1000):08d}"
     return f"{trade['symbol']}{exp_formatted}{trade['type']}{strike_formatted}"
 
+def get_stock_data(ticker_symbol):
+    try:
+        t = Ticker(ticker_symbol)
+        price_data = t.price.get(ticker_symbol, {})
+        return {
+            "price": price_data.get('regularMarketPrice'),
+            "change_pct": price_data.get('regularMarketChangePercent', 0) * 100
+        }
+    except Exception as e:
+        print(f"Error fetching stock data for {ticker_symbol}: {e}", file=sys.stderr)
+        return None
+
 def get_option_metrics(occ_symbol, entry_price, quantity):
     try:
         t = Ticker(occ_symbol)
@@ -95,12 +107,14 @@ def main():
     for trade in trades:
         occ_symbol = format_occ_symbol(trade)
         metrics = get_option_metrics(occ_symbol, trade["entry_price"], trade["quantity"])
+        stock = get_stock_data(trade["symbol"])
         
-        if metrics:
+        if metrics and stock:
             trade_stats.append({
                 "symbol": trade["symbol"],
                 "occ_symbol": occ_symbol,
-                "metrics": metrics
+                "metrics": metrics,
+                "stock": stock
             })
             
             original_premium = trade['entry_price'] * trade['quantity'] * 100
@@ -111,6 +125,8 @@ def main():
             total_keep += amount_keep
             
             summary_lines.append(f"**{trade['symbol']} (${trade['strike']} Call):**")
+            summary_lines.append(f"🗓️ **Expiration:** {trade['expiration']}")
+            summary_lines.append(f"📈 **Stock Price:** ${stock['price']:,.2f} ({'+' if stock['change_pct'] >= 0 else ''}{stock['change_pct']:.2f}%)")
             summary_lines.append(f"🔹 **Original Premium:** ${original_premium:,.2f} (Already in your pocket)")
             summary_lines.append(f"🔹 **Cost to Close Now:** ${cost_to_close:,.2f} (If you bought the contracts back today)")
             summary_lines.append(f"🔹 **Amount You Keep:** **${amount_keep:,.2f}** (Total profit if you exit now)")
